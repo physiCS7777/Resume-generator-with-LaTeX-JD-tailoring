@@ -1,0 +1,92 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.6in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=black}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.1em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\titleformat{\section}{\large\bfseries\uppercase}{}{0pt}{}[\titlerule]
+\titlespacing*{\section}{0pt}{10pt}{6pt}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries {{ name }}}\\[2pt]
+{% if title %}{\large {{ title }}}\\[4pt]{% endif %}
+{{ contact | join(' $\\cdot$ ') }}
+{% if links %}
+\\[2pt]
+{% for l in links %}
+{% if l.url %}\href{ {{- l.url -}} }{ {{- l.label -}} }{% else %}{{ l.label }}{% endif %}{% if not loop.last %} $\cdot$ {% endif %}
+{% endfor %}
+{% endif %}
+\end{center}
+
+{% if summary %}
+\section{Summary}
+{{ summary }}
+{% endif %}
+
+{% if skills %}
+\section{Skills}
+{% for g in skills %}
+\textbf{ {{- g.category -}} }{% if g.skill_items %}: {{ g.skill_items | join(', ') }}{% endif %}\\
+{% endfor %}
+{% endif %}
+
+{% if experience %}
+\section{Experience}
+{% for e in experience %}
+\textbf{ {{- e.role -}} } \hfill {{ e.start }}{% if e.end %} -- {{ e.end }}{% endif %}\\
+\textit{ {{- e.org -}} }{% if e.location %} \hfill {{ e.location }}{% endif %}
+{% if e.bullets %}
+\begin{itemize}
+{% for b in e.bullets %}
+\item {{ b }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if projects %}
+\section{Projects}
+{% for proj in projects %}
+\textbf{ {{- proj.name -}} }{% if proj.url %} \hfill \href{ {{- proj.url -}} }{ {{- proj.url_label -}} }{% endif %}\\
+{% if proj.tech %}\textit{ {{- proj.tech -}} }\\{% endif %}
+{% if proj.bullets %}
+\begin{itemize}
+{% for b in proj.bullets %}
+\item {{ b }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if education %}
+\section{Education}
+{% for e in education %}
+\textbf{ {{- e.school -}} } \hfill {{ e.dates }}\\
+\textit{ {{- e.degree -}} }{% if e.location %} \hfill {{ e.location }}{% endif %}
+{% if e.details %}
+\begin{itemize}
+{% for d in e.details %}
+\item {{ d }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if extras %}
+\section{Additional}
+{{ extras }}
+{% endif %}
+
+\end{document}
